@@ -23,9 +23,8 @@ backend/data/food101/
 backend/data/raw_datasets/
 backend/data/_limited_food_images/
 
-# Keep the small CSV metadata files. The current model is small enough to commit.
-# If future model weights become large, move them to Releases or Git LFS.
-# backend/models/*.pt
+# Keep the small CSV metadata files.
+backend/models/*.pt
 !backend/models/.gitkeep
 
 # Training outputs and experiment artifacts
