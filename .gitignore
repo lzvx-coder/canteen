@@ -1,0 +1,34 @@
+# Python cache and virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+.pycache_tmp/
+.venv/
+venv/
+env/
+
+# Local editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local runtime logs
+server_stdout.log
+server_stderr.log
+*.log
+
+# Large downloaded datasets and generated image subsets
+backend/data/food101/
+backend/data/raw_datasets/
+backend/data/_limited_food_images/
+
+# Keep the small CSV metadata files. The current model is small enough to commit.
+# If future model weights become large, move them to Releases or Git LFS.
+# backend/models/*.pt
+!backend/models/.gitkeep
+
+# Training outputs and experiment artifacts
+runs/
+checkpoints/
+*.onnx

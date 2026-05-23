@@ -1,0 +1,1059 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>智能食堂菜品推荐与营养分析系统</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+  <style>
+    :root {
+      --bg: #f6f7f9;
+      --panel: #ffffff;
+      --ink: #20242a;
+      --muted: #68717d;
+      --line: #dfe4ea;
+      --green: #2f8f5b;
+      --blue: #2f6fbb;
+      --yellow: #f2b94b;
+      --red: #d86b5d;
+      --shadow: 0 12px 32px rgba(30, 39, 52, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+    }
+
+    .shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    header {
+      background: #1f2933;
+      color: #fff;
+      padding: 22px 32px;
+      border-bottom: 4px solid var(--green);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin-top: 8px;
+      color: #c8d1dc;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    main {
+      width: min(1400px, 100%);
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 20px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .form-panel {
+      padding: 20px;
+      align-self: start;
+      position: sticky;
+      top: 16px;
+    }
+
+    h2 {
+      margin: 0 0 16px;
+      font-size: 19px;
+    }
+
+    label {
+      display: block;
+      margin: 14px 0 7px;
+      color: #39414b;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    input,
+    select {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid #cfd7df;
+      border-radius: 6px;
+      padding: 0 12px;
+      color: var(--ink);
+      background: #fff;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input[type="file"] {
+      padding: 9px 10px;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(47, 143, 91, 0.14);
+    }
+
+    .hint {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    button {
+      width: 100%;
+      height: 44px;
+      margin-top: 18px;
+      border: 0;
+      border-radius: 6px;
+      background: var(--green);
+      color: #fff;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    button:hover {
+      background: #27784d;
+    }
+
+    .secondary-button {
+      background: var(--blue);
+      margin-top: 10px;
+    }
+
+    .secondary-button:hover {
+      background: #285d9b;
+    }
+
+    .content {
+      display: grid;
+      gap: 20px;
+    }
+
+    .summary {
+      padding: 18px 20px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+    }
+
+    .metric {
+      border-left: 4px solid var(--green);
+      background: #f8faf9;
+      border-radius: 6px;
+      padding: 12px;
+      min-height: 82px;
+    }
+
+    .metric:nth-child(2) {
+      border-left-color: var(--blue);
+    }
+
+    .metric:nth-child(3) {
+      border-left-color: var(--yellow);
+    }
+
+    .metric:nth-child(4) {
+      border-left-color: var(--red);
+    }
+
+    .metric-title {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .metric-value {
+      margin-top: 8px;
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .recognition {
+      padding: 18px 20px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .recognition-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .image-preview {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border: 1px dashed #bac6d1;
+      border-radius: 8px;
+      background: #f8fafb;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .image-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .recognition-result {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fbfcfd;
+      min-height: 180px;
+    }
+
+    .recognition-title {
+      font-size: 15px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .candidate-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .candidate {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      border: 1px solid #dce7ef;
+      border-radius: 6px;
+      padding: 8px 10px;
+      background: #fff;
+      font-size: 13px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .tag {
+      border-radius: 999px;
+      background: #eef5fb;
+      color: #285d9b;
+      padding: 5px 9px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .choice-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .choice-chip {
+      width: auto;
+      height: 32px;
+      margin: 0;
+      border: 1px solid #cfd7df;
+      border-radius: 999px;
+      background: #fff;
+      color: #39414b;
+      padding: 0 12px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .choice-chip:hover {
+      background: #f4f7fa;
+    }
+
+    .choice-chip.active {
+      border-color: var(--green);
+      background: #e9f5ee;
+      color: var(--green);
+    }
+
+    .recommendations {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .section-title {
+      margin: 0 0 -8px;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      min-height: 330px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .rank {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: #e9f5ee;
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .score {
+      color: #1f2933;
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .dish-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .dish {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 3px;
+      border: 1px solid #d7e6dc;
+      background: #fbfdfc;
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .dish-position {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .reason {
+      color: #4b5562;
+      line-height: 1.65;
+      font-size: 14px;
+      min-height: 68px;
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .score-item {
+      background: #f5f7f9;
+      border-radius: 6px;
+      padding: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .score-item strong {
+      display: block;
+      color: var(--ink);
+      margin-top: 4px;
+      font-size: 15px;
+    }
+
+    .charts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .chart-panel {
+      padding: 18px;
+      min-height: 360px;
+    }
+
+    .chart {
+      width: 100%;
+      height: 300px;
+    }
+
+    .profiles {
+      padding: 18px;
+    }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .profile-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fbfcfd;
+    }
+
+    .profile-card h3 {
+      margin: 0 0 10px;
+      font-size: 16px;
+    }
+
+    .profile-card p {
+      margin: 7px 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 13px;
+    }
+
+    @media (max-width: 1060px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+
+      .form-panel {
+        position: static;
+      }
+
+      .recommendations,
+      .charts,
+      .profile-grid,
+      .summary,
+      .recognition-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <h1>智能食堂菜品推荐与营养分析系统</h1>
+      <div class="subtitle">多目标加权推荐 + 菜品图像识别模拟 + 营养画像分析，让实验展示更像一个完整的智能应用。</div>
+    </header>
+
+    <main>
+      <section class="panel form-panel">
+        <h2>用户画像输入</h2>
+        <label for="budget">预算</label>
+        <input id="budget" type="number" min="5" max="80" value="20" />
+
+        <label>饮食目标</label>
+        <input id="goal" type="hidden" value="减脂" />
+        <div class="choice-group" id="goalChips"></div>
+
+        <label for="taste">喜欢口味</label>
+        <select id="taste">
+          <option>清淡</option>
+          <option>咸香</option>
+          <option>鲜香</option>
+          <option>酸甜</option>
+          <option>家常</option>
+          <option>香辣</option>
+          <option>麻辣</option>
+          <option>爽口</option>
+        </select>
+
+        <label>偏好品类</label>
+        <input id="preferences" type="hidden" value="" />
+        <div class="choice-group" id="preferenceChips"></div>
+        <div class="hint">可多选。</div>
+
+        <label>锁定位置范围</label>
+        <input id="positions" type="hidden" value="" />
+        <div class="choice-group" id="positionChips">
+          <button class="choice-chip active" type="button" data-position="">不限</button>
+        </div>
+        <div class="hint">选择后只在这些餐厅或窗口范围内推荐，加小料也会锁定同一位置。</div>
+
+        <label>忌口</label>
+        <input id="avoid" type="hidden" value="" />
+        <div class="choice-group" id="avoidChips"></div>
+        <div class="hint">可多选，推荐时会避开选择的名称和口味的菜品。</div>
+
+        <label for="history">最近吃过</label>
+        <input id="history" value="宫保鸡丁" />
+        <div class="hint">系统会降低重复菜品权重，体现个性化推荐。</div>
+
+        <button id="recommendBtn">生成推荐</button>
+      </section>
+
+      <section class="content">
+        <section class="panel recognition">
+          <h2>菜品图像识别拓展</h2>
+          <div class="recognition-grid">
+            <div>
+              <label for="dishImage">上传菜品图片</label>
+              <input id="dishImage" type="file" accept="image/*" />
+              <div class="hint">轻量识别模拟</div>
+
+              <label for="features">识别线索</label>
+              <input id="features" value="" placeholder="可选：绿色 鸡 高蛋白 清淡" />
+              <div class="hint">可输入颜色、食材、口味或营养特征，如：红色 辣 鸡、白色 豆腐 汤。</div>
+
+              <button id="recognizeBtn" class="secondary-button">识别菜品并联动推荐</button>
+            </div>
+            <div>
+              <div class="image-preview" id="imagePreview">图片预览区域</div>
+              <div class="recognition-result" id="recognitionResult">
+                <div class="recognition-title">等待识别</div>
+                <div class="hint">识别结果会展示候选菜品、置信度和匹配到的视觉/语义特征。</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel summary" id="summary"></section>
+        <h2 class="section-title">学校菜品推荐</h2>
+        <section class="recommendations" id="recommendations"></section>
+
+        <section class="charts">
+          <div class="panel chart-panel">
+            <h2>Top3 营养对比</h2>
+            <div id="nutritionChart" class="chart"></div>
+          </div>
+          <div class="panel chart-panel">
+            <h2>推荐算法分项评分</h2>
+            <div id="scoreChart" class="chart"></div>
+          </div>
+        </section>
+
+        <section class="panel profiles">
+          <h2>不同用户画像测试</h2>
+          <div class="profile-grid" id="profiles"></div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const API_BASE = window.location.origin.startsWith("http")
+      ? window.location.origin
+      : "http://127.0.0.1:8004";
+    const AUTO_SHUTDOWN = new URLSearchParams(window.location.search).get("auto_shutdown") === "1";
+    const nutritionChart = echarts.init(document.getElementById("nutritionChart"));
+    const scoreChart = echarts.init(document.getElementById("scoreChart"));
+    let uploadedImageData = "";
+    let uploadedImageName = "";
+    let uploadedImageFeatures = [];
+    let goalOptions = [
+      { value: "减脂", label: "减脂", description: "控热量和脂肪" },
+      { value: "增肌", label: "增肌", description: "高蛋白和足量能量" },
+      { value: "普通", label: "普通", description: "均衡正餐" },
+      { value: "控预算", label: "控预算", description: "优先不超预算" },
+    ];
+    let preferenceOptions = ["盖饭", "面条", "凉面", "卤肉饭", "汉堡", "炸鸡", "咖啡", "牛奶", "果茶", "乳茶"];
+    let avoidOptions = ["辣", "牛肉", "猪肉", "鸡肉", "鱼虾海鲜", "鸡蛋", "奶制品", "咖啡", "油炸", "高脂", "高热量"];
+    let selectedGoal = "减脂";
+    let selectedPreferences = [];
+    let selectedAvoid = [];
+    let selectedPositions = [];
+    let availablePositions = [];
+
+    function splitInput(value) {
+      return value
+        .split(/[,，、\s]+/)
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+
+    function unique(items) {
+      return Array.from(new Set(items.filter(Boolean)));
+    }
+
+    function renderGoalChips() {
+      document.getElementById("goalChips").innerHTML = goalOptions.map((item) => `
+        <button class="choice-chip ${selectedGoal === item.value ? "active" : ""}" type="button" data-goal="${item.value}" title="${item.description || ""}">${item.label || item.value}</button>
+      `).join("");
+      document.getElementById("goal").value = selectedGoal;
+    }
+
+    function updatePreferenceInput() {
+      document.getElementById("preferences").value = selectedPreferences.join("，");
+    }
+
+    function renderPreferenceChips() {
+      document.getElementById("preferenceChips").innerHTML = preferenceOptions.map((item) => `
+        <button class="choice-chip ${selectedPreferences.includes(item) ? "active" : ""}" type="button" data-preference="${item}">${item}</button>
+      `).join("");
+    }
+
+    function togglePreference(preference) {
+      selectedPreferences = selectedPreferences.includes(preference)
+        ? selectedPreferences.filter((item) => item !== preference)
+        : unique([...selectedPreferences, preference]);
+      updatePreferenceInput();
+      renderPreferenceChips();
+    }
+
+    function updateAvoidInput() {
+      document.getElementById("avoid").value = selectedAvoid.join("，");
+    }
+
+    function renderAvoidChips() {
+      document.getElementById("avoidChips").innerHTML = avoidOptions.map((item) => `
+        <button class="choice-chip ${selectedAvoid.includes(item) ? "active" : ""}" type="button" data-avoid="${item}">${item}</button>
+      `).join("");
+      updateAvoidInput();
+    }
+
+    function toggleAvoid(avoid) {
+      selectedAvoid = selectedAvoid.includes(avoid)
+        ? selectedAvoid.filter((item) => item !== avoid)
+        : unique([...selectedAvoid, avoid]);
+      renderAvoidChips();
+    }
+
+    function renderPositionChips(positions) {
+      const allPositions = ["", ...positions];
+      document.getElementById("positionChips").innerHTML = allPositions.map((position) => {
+        const label = position || "不限";
+        const active = position ? selectedPositions.includes(position) : selectedPositions.length === 0;
+        return `<button class="choice-chip ${active ? "active" : ""}" type="button" data-position="${position}">${label}</button>`;
+      }).join("");
+      document.getElementById("positions").value = selectedPositions.join("，");
+    }
+
+    function togglePosition(position) {
+      if (!position) {
+        selectedPositions = [];
+      } else {
+        selectedPositions = selectedPositions.includes(position)
+          ? selectedPositions.filter((item) => item !== position)
+          : unique([...selectedPositions, position]);
+      }
+      renderPositionChips(availablePositions);
+    }
+
+    async function loadOptionData() {
+      try {
+        const response = await fetch(`${API_BASE}/options`);
+        const data = await response.json();
+        goalOptions = data.goals || goalOptions;
+        preferenceOptions = (data.preferences || []).map((item) => item.value || item).filter(Boolean);
+        avoidOptions = (data.avoid || []).map((item) => item.value || item).filter(Boolean);
+        availablePositions = (data.positions || []).map((item) => item.value || item).filter(Boolean);
+        renderGoalChips();
+        renderPreferenceChips();
+        renderAvoidChips();
+        renderPositionChips(availablePositions);
+      } catch (error) {
+        renderGoalChips();
+        renderPreferenceChips();
+        renderAvoidChips();
+        renderPositionChips([]);
+      }
+    }
+
+    function rgbToHsv(r, g, b) {
+      const nr = r / 255;
+      const ng = g / 255;
+      const nb = b / 255;
+      const max = Math.max(nr, ng, nb);
+      const min = Math.min(nr, ng, nb);
+      const delta = max - min;
+      let h = 0;
+      if (delta !== 0) {
+        if (max === nr) {
+          h = ((ng - nb) / delta) % 6;
+        } else if (max === ng) {
+          h = (nb - nr) / delta + 2;
+        } else {
+          h = (nr - ng) / delta + 4;
+        }
+      }
+      h = Math.round(h * 60);
+      if (h < 0) h += 360;
+      return { h, s: max === 0 ? 0 : delta / max, v: max };
+    }
+
+    function classifyPixel(r, g, b) {
+      const { h, s, v } = rgbToHsv(r, g, b);
+      if (v < 0.18) return "深色";
+      if (s < 0.16 && v > 0.72) return "白色";
+      if (h >= 65 && h <= 165 && s > 0.2) return "绿色";
+      if ((h <= 18 || h >= 345) && s > 0.25) return "红色";
+      if (h > 18 && h <= 55 && s > 0.22) return "黄色";
+      if (h > 165 && h <= 250 && s > 0.18) return "青色";
+      return "浅色";
+    }
+
+    function inferFoodFeatures(colorCounts, sampledPixels) {
+      const total = Math.max(sampledPixels, 1);
+      const ratio = (name) => (colorCounts[name] || 0) / total;
+      const features = [];
+      const green = ratio("绿色");
+      const yellow = ratio("黄色");
+      const white = ratio("白色");
+      if (green > 0.16) features.push("绿色", "素菜", "清淡");
+      if (ratio("红色") > 0.12 && green < 0.18) features.push("红色", "辣");
+      if (yellow > 0.18 && green < 0.12) features.push("黄色", "鸡蛋", "玉米", "土豆");
+      if (white > 0.18 && green < 0.12) features.push("白色", "豆腐");
+      if (white > 0.28 && green < 0.08 && yellow < 0.12) features.push("米饭");
+      if (ratio("深色") > 0.16 && green < 0.16) features.push("肉类", "咸香");
+      if (ratio("浅色") > 0.36 && white > 0.12) features.push("汤", "清淡");
+      if ((white > 0.38 && green < 0.08) || (yellow > 0.30 && green < 0.10)) features.push("主食");
+      return unique(features);
+    }
+
+    function analyzeImageFeatures(imageData) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const size = 96;
+          canvas.width = size;
+          canvas.height = size;
+          const ctx = canvas.getContext("2d", { willReadFrequently: true });
+          ctx.drawImage(img, 0, 0, size, size);
+          const pixels = ctx.getImageData(0, 0, size, size).data;
+          const colorCounts = {};
+          let sampled = 0;
+          for (let i = 0; i < pixels.length; i += 16) {
+            const alpha = pixels[i + 3];
+            if (alpha < 120) continue;
+            const { s, v } = rgbToHsv(pixels[i], pixels[i + 1], pixels[i + 2]);
+            if (s < 0.08 && v > 0.86) continue;
+            const label = classifyPixel(pixels[i], pixels[i + 1], pixels[i + 2]);
+            colorCounts[label] = (colorCounts[label] || 0) + 1;
+            sampled += 1;
+          }
+          resolve(inferFoodFeatures(colorCounts, sampled));
+        };
+        img.onerror = () => resolve([]);
+        img.src = imageData;
+      });
+    }
+
+    function requestBody() {
+      return {
+        budget: Number(document.getElementById("budget").value || 20),
+        goal: document.getElementById("goal").value,
+        taste: document.getElementById("taste").value,
+        preferences: splitInput(document.getElementById("preferences").value).filter((item) => item !== "不限"),
+        positions: selectedPositions,
+        avoid: splitInput(document.getElementById("avoid").value),
+        history: splitInput(document.getElementById("history").value),
+        top_k: 3,
+      };
+    }
+
+    function metricHtml(title, value, unit = "") {
+      return `
+        <div class="metric">
+          <div class="metric-title">${title}</div>
+          <div class="metric-value">${value}${unit}</div>
+        </div>
+      `;
+    }
+
+    function renderSummary(top) {
+      document.getElementById("summary").innerHTML = [
+        metricHtml("综合推荐分", top.score, " 分"),
+        metricHtml("总价格", top.total.price, " 元"),
+        metricHtml("总热量", top.total.calories, " kcal"),
+        metricHtml("蛋白质", top.total.protein, " g"),
+        metricHtml("脂肪", top.total.fat, " g"),
+      ].join("");
+    }
+
+    function renderCards(items) {
+      document.getElementById("recommendations").innerHTML = items
+        .map((item, index) => `
+          <article class="card">
+            <div class="rank">
+              <span class="badge">TOP ${index + 1}</span>
+              <span class="score">${item.score}</span>
+            </div>
+            <div class="dish-list">
+              ${item.dishes.map((dish) => `
+                <span class="dish">
+                  <span>${dish.name}</span>
+                  <span class="dish-position">${dish.position || "未知窗口"}</span>
+                </span>
+              `).join("")}
+            </div>
+            <div class="reason">${item.reason}</div>
+            <div class="score-grid">
+              <div class="score-item">营养匹配<strong>${item.nutrition_score}</strong></div>
+              <div class="score-item">口味匹配<strong>${item.taste_score}</strong></div>
+              <div class="score-item">预算匹配<strong>${item.budget_score}</strong></div>
+              <div class="score-item">品类匹配<strong>${item.preference_score}</strong></div>
+              <div class="score-item">健康评分<strong>${item.health_score}</strong></div>
+              <div class="score-item">避免重复<strong>${item.diversity_score}</strong></div>
+              <div class="score-item">总价<strong>${item.total.price} 元</strong></div>
+            </div>
+          </article>
+        `)
+        .join("");
+    }
+
+    function renderCharts(items) {
+      const names = items.map((item, index) => `TOP${index + 1}`);
+      nutritionChart.setOption({
+        tooltip: { trigger: "axis" },
+        legend: { bottom: 0 },
+        grid: { left: 42, right: 18, top: 28, bottom: 56 },
+        xAxis: { type: "category", data: names },
+        yAxis: { type: "value" },
+        series: [
+          { name: "热量 kcal", type: "bar", data: items.map((item) => item.total.calories), itemStyle: { color: "#2f6fbb" } },
+          { name: "蛋白质 g", type: "bar", data: items.map((item) => item.total.protein), itemStyle: { color: "#2f8f5b" } },
+          { name: "脂肪 g", type: "bar", data: items.map((item) => item.total.fat), itemStyle: { color: "#d86b5d" } },
+        ],
+      });
+
+      const top = items[0];
+      scoreChart.setOption({
+        tooltip: {},
+        radar: {
+          indicator: [
+            { name: "营养", max: 100 },
+            { name: "口味", max: 100 },
+            { name: "预算", max: 100 },
+            { name: "品类", max: 100 },
+            { name: "健康", max: 100 },
+            { name: "避免重复", max: 100 },
+          ],
+          radius: 100,
+        },
+        series: [{
+          type: "radar",
+          data: [{
+            value: [
+              top.nutrition_score,
+              top.taste_score,
+              top.budget_score,
+              top.preference_score,
+              top.health_score,
+              top.diversity_score,
+            ],
+            name: "TOP1",
+            areaStyle: { color: "rgba(47, 143, 91, 0.22)" },
+            lineStyle: { color: "#2f8f5b" },
+            itemStyle: { color: "#2f8f5b" },
+          }],
+        }],
+      });
+    }
+
+    async function recommend() {
+      const response = await fetch(`${API_BASE}/recommend`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestBody()),
+      });
+      const data = await response.json();
+      const items = data.recommendations;
+      renderSummary(items[0]);
+      renderCards(items);
+      renderCharts(items);
+    }
+
+    function renderRecognition(data) {
+      const recognition = data.recognition_result || {};
+      const publicCandidates = data.public_predictions || [];
+      const schoolBest = data.best_match;
+      const candidates = data.candidates || [];
+      const hasModelRecognition = recognition.source === "model";
+      const title = hasModelRecognition
+        ? `图片识别结果：${recognition.name}（置信度 ${(Number(recognition.confidence) * 100).toFixed(0)}%）`
+        : `图片线索：${recognition.name || "未识别"}`;
+      document.getElementById("recognitionResult").innerHTML = `
+        <div class="recognition-title">${title}</div>
+        <div class="hint">${recognition.note || "优先显示模型对图片本身的识别结果；学校菜品只在后续区域作为推荐来源。"}</div>
+        <div class="tag-row">
+          ${data.features.map((feature) => `<span class="tag">${feature}</span>`).join("")}
+        </div>
+        ${publicCandidates.length ? `
+          <div class="hint" style="margin-top:12px;">模型 Top 结果</div>
+          <div class="candidate-list">
+            ${publicCandidates.slice(0, 5).map((item) => `
+              <div class="candidate">
+                <span>${item.dish_name}${item.label && item.label !== item.dish_name ? ` · ${String(item.label).replaceAll("_", " ")}` : ""}</span>
+                <strong>${(Number(item.confidence) * 100).toFixed(0)}%</strong>
+              </div>
+            `).join("")}
+          </div>
+        ` : ""}
+        <div class="hint" style="margin-top:12px;">学校菜品库相似候选</div>
+        <div class="candidate-list">
+          ${candidates.map((item) => `
+            <div class="candidate">
+              <span>${item.dish.name} · ${item.dish.position || "未知窗口"} · ${item.dish.taste} · ${item.dish.calories} kcal</span>
+              <strong>${(item.confidence * 100).toFixed(0)}%</strong>
+            </div>
+          `).join("")}
+        </div>
+      `;
+      document.getElementById("taste").value = schoolBest.dish.taste;
+      renderSummary(data.followup_recommendations[0]);
+      renderCards(data.followup_recommendations);
+      renderCharts(data.followup_recommendations);
+    }
+
+    async function recognize() {
+      const body = {
+        features: splitInput(document.getElementById("features").value),
+        image_features: uploadedImageFeatures,
+        image_name: uploadedImageName,
+        image_data: uploadedImageData,
+        budget: Number(document.getElementById("budget").value || 22),
+        goal: document.getElementById("goal").value,
+        preferences: splitInput(document.getElementById("preferences").value).filter((item) => item !== "不限"),
+        positions: selectedPositions,
+        avoid: splitInput(document.getElementById("avoid").value),
+        history: splitInput(document.getElementById("history").value),
+      };
+      const response = await fetch(`${API_BASE}/recognize`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const data = await response.json();
+      renderRecognition(data);
+    }
+
+    async function loadProfiles() {
+      const response = await fetch(`${API_BASE}/profiles`);
+      const data = await response.json();
+      document.getElementById("profiles").innerHTML = data.profiles.map((profile) => {
+        const top = profile.top_recommendation;
+        return `
+          <div class="profile-card">
+            <h3>${profile.name}</h3>
+            <p>输入：预算 ${profile.input.budget} 元，目标 ${profile.input.goal}，口味 ${profile.input.taste}</p>
+            <p>推荐：${top.dishes.map((dish) => dish.name).join(" + ")}</p>
+            <p>营养：${top.total.calories} kcal，蛋白质 ${top.total.protein} g，脂肪 ${top.total.fat} g</p>
+          </div>
+        `;
+      }).join("");
+    }
+
+    document.getElementById("dishImage").addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      if (!file) {
+        return;
+      }
+      uploadedImageName = file.name;
+      const reader = new FileReader();
+      reader.onload = async () => {
+        uploadedImageData = String(reader.result || "");
+        document.getElementById("imagePreview").innerHTML = `<img src="${uploadedImageData}" alt="菜品图片预览" />`;
+        uploadedImageFeatures = await analyzeImageFeatures(uploadedImageData);
+        const manualFeatures = splitInput(document.getElementById("features").value);
+        document.getElementById("features").value = unique([...manualFeatures, ...uploadedImageFeatures]).join(" ");
+        document.getElementById("recognitionResult").innerHTML = `
+          <div class="recognition-title">已读取图片视觉特征</div>
+          <div class="hint">系统从图片像素中提取到颜色和类型线索，点击识别后会和菜品库进行匹配。</div>
+          <div class="tag-row">
+            ${uploadedImageFeatures.map((feature) => `<span class="tag">${feature}</span>`).join("")}
+          </div>
+        `;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById("recommendBtn").addEventListener("click", recommend);
+    document.getElementById("recognizeBtn").addEventListener("click", recognize);
+    document.getElementById("goalChips").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-goal]");
+      if (button) {
+        selectedGoal = button.dataset.goal;
+        renderGoalChips();
+      }
+    });
+    document.getElementById("preferenceChips").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-preference]");
+      if (button) {
+        togglePreference(button.dataset.preference);
+      }
+    });
+    document.getElementById("avoidChips").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-avoid]");
+      if (button) {
+        toggleAvoid(button.dataset.avoid);
+      }
+    });
+    document.getElementById("positionChips").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-position]");
+      if (button) {
+        togglePosition(button.dataset.position);
+      }
+    });
+    let shutdownSent = false;
+    function requestServerShutdown() {
+      if (!AUTO_SHUTDOWN || shutdownSent || window.location.origin !== API_BASE) {
+        return;
+      }
+      shutdownSent = true;
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(`${API_BASE}/shutdown`, new Blob(["{}"], { type: "application/json" }));
+        return;
+      }
+      fetch(`${API_BASE}/shutdown`, {
+        method: "POST",
+        body: "{}",
+        headers: { "Content-Type": "application/json" },
+        keepalive: true,
+      }).catch(() => {});
+    }
+    window.addEventListener("pagehide", requestServerShutdown);
+    window.addEventListener("beforeunload", requestServerShutdown);
+    window.addEventListener("resize", () => {
+      nutritionChart.resize();
+      scoreChart.resize();
+    });
+
+    renderGoalChips();
+    renderPreferenceChips();
+    renderAvoidChips();
+    loadOptionData();
+    recommend();
+    loadProfiles();
+  </script>
+</body>
+</html>

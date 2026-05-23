@@ -1,0 +1,209 @@
+﻿id,name,english_name
+000,麻婆豆腐,Mapo Tofu
+001,家常豆腐,Home style sauteed Tofu
+002,煎豆腐,Fried Tofu
+003,豆腐花,Bean curd
+004,臭豆腐,Stinky tofu
+005,酸辣土豆丝,Potato silk
+006,土豆泥,Pan fried potato
+007,香煎土豆,Pan fried potato
+008,土豆焖豆角,Braised beans with potato
+009,地三鲜,"Fried Potato, Green Pepper & Eggplant"
+010,薯条,French fries
+011,鱼香茄子,Yu-Shiang Eggplant
+012,蒜泥茄子,Mashed garlic eggplant
+013,肉末茄子,Eggplant with mince pork
+014,辣白菜,Spicy cabbage
+015,醋溜白菜,Sour cabbage
+016,上汤娃娃菜,Steamed Baby Cabbage
+017,手撕包菜,Shredded cabbage
+018,蚝油生菜,Sauteed Lettuce in Oyster Sauce
+019,炒青菜,Saute vegetable
+020,炒空心菜,tumis kangkung
+021,蒜蓉油麦菜,Lettuce with smashed garlic
+022,清炒菠菜,Sauteed spainch
+023,炒豆芽,Sauteed bean sprouts
+024,炒蚕豆,Sauteed broad beans
+025,毛豆,Soybean
+026,蚝油西兰花,Broccoli with Oyster Sauce
+027,香煎藕盒,Deep Fried lotus root
+028,莲藕,Lotus root
+029,凉拌西红柿,Tomato salad
+030,鸡鸭胗,Gizzard
+031,凉拌木耳,Black Fungus in Vinegar Sauce
+032,口水黄瓜,Cucumber in Sauce
+033,花生米,peanut
+034,凉拌海带丝,Seaweed salad
+035,拔丝山药,Chinese Yam in Hot Toffee
+036,清炒山药,Fried Yam
+037,干煸豆角,Fried beans
+038,蚝油杏鲍菇,Oyster mushroom
+039,酿苦瓜,stuffed bitter melon
+040,炒苦瓜,sauteed bitter melon
+041,虎皮青椒,pepper with tiger skin
+042,凉拌腐竹,Yuba salad
+043,炒花菜,fried cauliflower
+044,松仁玉米,Sauteed Sweet Corn with Pine Nuts
+045,香菇青菜,Sauted Chinese Greens with Mushrooms
+046,椒盐蘑菇,Spiced mushroom
+047,芹菜香干,Celery and tofu
+048,西芹百合,Sauteed Lily Bulbs and Celery
+049,韭菜炒香干,Leak and tofu
+050,西红柿炒鸡蛋,Scrambled egg with tomato
+051,韭菜炒鸡蛋,Scrambled Egg with Leek
+052,黄瓜炒鸡蛋,Scrambled Egg with cucumber
+053,鸡蛋羹,Steamed egg custard
+054,猪肝,Pork liver
+055,猪耳朵,Pig ears
+056,叉烧,roast pork
+057,粉蒸排骨,Steamed pork with rice powder
+058,糖醋排骨,Sweet and sour spareribs
+059,海带炖排骨,Braised spareribs with kelp
+060,可乐鸡翅,Cola Chicken wings
+061,泡椒凤爪,Chicken Feet with Pickled Peppers
+062,红烧鸡爪,Chicken Feet with black bean sauce
+063,口水鸡,Steamed Chicken with Chili Sauce
+064,烤鸭烧鹅,Roast goose
+065,白斩鸡,Boiled chicken
+066,大盘鸡,Saute Spicy Chicken
+067,香菇蒸鸡,Steamed Chicken with Mushroom
+068,黄焖鸡,chicken braised with brown sauce
+069,豉油鸡,Soy sauce chicken
+070,辣子鸡,Spicy Chicken
+071,宫保鸡丁,Kung Pao Chicken
+072,三杯鸡,Stewed Chicken with Three Cups Sauce
+073,鸡丝、鸡丝面,Shredded chicken
+074,炸鸡腿,Fried chicken drumsticks
+075,啤酒鸭,Beer duck
+076,腰花,Scalloped pork or lamb kidneys
+077,红烧肉,Braised pork
+078,红烧牛肉,Braised beef
+079,酱牛肉,Beef Seasoned with Soy Sauce
+080,西红柿牛腩,Sirloin tomatoes
+081,土豆炖牛腩,Stewed sirloin potatoes
+082,杭椒牛柳,Sauteed Beef Fillet with Hot Green Pepper
+083,梅菜扣肉,Pork with salted vegetable
+084,回锅肉,Double cooked pork slices
+085,猪肉炖粉条,Braised Pork with Vermicelli
+086,水煮肉片,Boiled Shredded pork in chili oil
+087,糖醋里脊,Fried Sweet and Sour Tenderloin
+088,咕噜肉,Cripsy sweet & sour pork slices
+089,锅包肉,Pot bag meat
+090,农家小炒肉,Shredded Pork with Vegetables
+091,培根金针菇卷,Tiger lily buds in Baconic
+092,京酱肉丝,Sauteed Shredded Pork in Sweet Bean Sauce
+093,豆角肉丝,Shredded pork with bean
+094,酱焖猪蹄,Braised pig feet with soy sauce
+095,肚丝,Tripe
+096,青椒肉丝,Shredded pork and green pepper
+097,鱼香肉丝,Yu-Shiang Shredded Pork
+098,木耳炒肉丝,Braised Fungus with pork slice
+099,木须肉,"Sauteed Sliced Pork,Eggs and Black Fungus"
+100,莴笋肉丝,Lettuce shredded meat
+101,蚂蚁上树,Sauteed Vermicelli with Spicy Minced Pork
+102,孜然羊肉,Fried Lamb with Cumin
+103,羊肉串,Lamb shashlik
+104,葱爆羊肉,Sauteed Sliced Lamb with Scallion
+105,红烧狮子头,Stewed Pork Ball in Brown Sauce
+106,酸菜鱼,Boiled Fish with Picked Cabbage and Chili
+107,烤鱼,grilled fish
+108,糖醋鲤鱼,Sweet and sour fish
+109,松鼠桂鱼,Sweet and Sour Mandarin Fish
+110,红烧带鱼,Braised Hairtail in Brown Sauce
+111,剁椒鱼头,Steamed Fish Head with Diced Hot Red Peppers
+112,水煮鱼,Fish Filets in Hot Chili Oil
+113,清蒸鲈鱼,Steamed Perch
+114,芝士虾球,Cheese Shrimp Meat
+115,虾仁西兰花,Shrimp broccoli
+116,油焖大虾,Braised Shrimp in chili oil
+117,香辣虾,Spicy shrimp
+118,香辣小龙虾,Spicy crayfish
+119,水晶虾饺,Shrimp Duplings
+120,蒜茸粉丝蒸虾,Steamed shrimp with garlic and vermicelli
+121,清炒虾仁,Sauteed Shrimp meat
+122,皮皮虾,Pipi shrimp
+123,扇贝,Scallop in Shell
+124,生蚝,Oysters
+125,鱿鱼,squid
+126,鲍鱼,Abalone
+127,螃蟹,Crab
+128,甲鱼,Turtle
+129,鳝鱼,eel
+130,扬州炒饭,Yangzhou fried rice
+131,蛋包饭,Omelette
+132,小笼汤包,Steamed Bun Stuffed
+133,烧麦,Steamed Pork Dumplings
+134,家常早餐鸡蛋饼,egg omelet
+135,土豆鸡蛋饼,Potato omelet
+136,鸡蛋灌饼,Egg pie cake
+137,卤蛋,Marinated Egg
+138,荷包蛋,Poached Egg
+139,葱花手抓饼,Pine cake with Diced Scallion
+140,芝麻烧饼,Sesame seed cake
+141,肉夹馍,Chinese hamburger
+142,韭菜盒子,Leek box
+143,南瓜紫薯馒头,steamed bun with purple potato and pumpkin
+144,馒头,steamed bun
+145,包子,Steamed stuffed bun
+146,南瓜饼,Pumpkin pie
+147,披萨,Pizza
+148,油条,Deep-Fried Dough Sticks
+149,炸酱面,sauteed noodles with minced meat
+150,重庆酸辣粉,Chongqing Hot and Sour Rice Noodles
+151,凉拌凉面,Cold noodles
+152,西红柿鸡蛋面,Noodles with egg and tomato
+153,肉酱意大利面,spaghetti with meat sauce
+154,茄汁拌面,Noodles with tomato sauce
+155,凉皮,Cold Rice Noodles
+156,担担面,Sichuan noodles with peppery sauce
+157,臊子面,Qishan noodles
+158,炒面,fried noodles
+159,饺子,Dumplings
+160,玉米棒,Corn Cob
+161,红烧牛肉面,Braised beef noodle
+162,河粉,fried rice noodles
+163,肠粉,Steamed vermicelli roll
+164,鲜肉小馄饨,Pork wonton
+165,煎饺,Fried Dumplings
+166,汤圆,Tang-yuan
+167,小米粥,Millet congee
+168,红薯粥,Sweet potato porridge
+169,海蛰,Jellyfish
+170,皮蛋瘦肉粥,Minced Pork Congee with Preserved Egg
+171,大米粥,Rice porridge
+172,米饭,Rice
+173,紫菜包饭,Laver rice
+174,石锅饭,Stone pot of rice
+175,乌鸡汤,Black bone chicken soup
+176,鲫鱼豆腐汤,Crucian and Bean Curd Soup
+177,疙瘩汤,Dough Drop and Assorted Vegetable Soup
+178,酸辣汤,Hot and Sour Soup
+179,萝卜排骨汤,Pork ribs soup with radish
+180,西红柿鸡蛋汤,Tomato and Egg Soup
+181,西湖牛肉羹,West Lake beef soup
+182,莲藕排骨汤,Lotus Root and Rib soup
+183,紫菜蛋花汤,Seaweed and Egg Soup
+184,海带豆腐汤,Seaweed tofu soup
+185,玉米排骨汤,Corn and sparerib soup
+186,菠菜猪肝汤,Spinach and pork liver soup
+187,罗宋汤,Borsch
+188,银耳汤,White fungus soup
+189,冬瓜汤,White gourd soup
+190,酱汤,Miso soup
+191,毛血旺,Duck Blood in Chili Sauce
+192,夫妻肺片,Pork Lungs in Chili Sauce
+193,麻辣香锅,Spicy pot
+194,黄金如意肉卷,Golden meat rolls
+195,蛋糕,Chiffon Cake
+196,蛋挞,Egg Tart
+197,面包,Bread
+198,牛角包,Croissant
+199,吐司,toast
+200,饼干,Biscuits
+201,曲奇饼干,cookies
+202,苏打饼干,Soda biscuit
+203,双皮奶,Double skin milk
+204,冰激凌,ice cream
+205,鸡蛋布丁,Egg pudding
+206,冰糖雪梨,Sweet stewed snow pear
+207,水果沙拉,Fruit salad

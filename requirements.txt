@@ -1,0 +1,5 @@
+# Lightweight production dependencies.
+# The web app and recommendation engine use the Python standard library.
+#
+# For local model training or PyTorch image recognition, install:
+#   pip install -r requirements-ml.txt
