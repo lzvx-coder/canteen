@@ -27,7 +27,7 @@
 进入项目目录：
 
 ```bash
-cd exp4
+cd 
 ```
 
 安装 PyTorch 相关依赖：
@@ -105,123 +105,6 @@ python app.py
 ```
 
 系统会自动打开浏览器。本机演示地址会带 `auto_shutdown=1`，关闭页面时会自动关闭后端服务。
-
-### 局域网分享
-
-如果要让同一 Wi-Fi 或同一局域网里的其他人访问，在项目目录运行：
-
-```bash
-python share.py
-```
-
-终端会打印类似下面的地址：
-
-```text
-局域网访问地址: http://192.168.1.23:8004/
-```
-
-把这个地址发给别人即可。分享模式不会因为某个人关闭网页而停止后端服务；结束分享时，在运行服务的终端按 `Ctrl+C`。
-
-如果别人打不开，请检查：
-
-- 对方和你的电脑在同一个 Wi-Fi 或局域网。
-- Windows 防火墙允许 Python 访问专用网络。
-- 终端里打印的端口可能不是 8004，按实际打印的地址发给别人。
-
-浏览器访问：
-
-```text
-http://127.0.0.1:8004/
-```
-
-### 免费线上部署：GitHub + Render
-
-如果希望老师同学不用安装 Python，直接打开一个网址使用，可以把项目推到 GitHub 后部署到 Render 免费 Web Service。
-
-本仓库已经准备好线上部署文件：
-
-```text
-production.py       # 线上启动入口，读取平台 PORT，监听 0.0.0.0
-requirements.txt    # 轻量生产依赖，默认不安装 PyTorch
-requirements-ml.txt # 本地训练或完整模型识别依赖
-render.yaml         # Render Blueprint 配置
-.gitignore          # 忽略缓存、大数据集和模型权重
-```
-
-当前 `render.yaml` 默认尝试安装 `requirements-ml.txt`，以启用 PyTorch 图片识别模型。如果 Render 免费实例部署失败或构建太慢，把 `render.yaml` 中这一行：
-
-```yaml
-buildCommand: pip install -r requirements-ml.txt
-```
-
-改回轻量版：
-
-```yaml
-buildCommand: pip install -r requirements.txt
-```
-
-轻量版中推荐系统、偏好选择、位置锁定、图片上传和规则兜底都可用，只是不加载 `.pt` 模型。
-
-#### 推送到 GitHub
-
-```bash
-git init
-git add .
-git commit -m "Prepare canteen recommendation app for deployment"
-git branch -M main
-git remote add origin https://github.com/你的用户名/你的仓库名.git
-git push -u origin main
-```
-
-注意：`.gitignore` 默认不会提交以下大文件或目录：
-
-```text
-backend/data/food101/
-backend/data/raw_datasets/
-backend/data/_limited_food_images/
-```
-
-会提交核心数据：
-
-```text
-backend/data/dishes.csv
-backend/data/chinesefoodnet_labels.csv
-```
-
-#### 在 Render 部署
-
-1. 打开 Render，创建 Web Service 或 Blueprint。
-2. 连接 GitHub 仓库。
-3. 如果手动填写配置，使用：
-
-```text
-Build Command: pip install -r requirements.txt
-Start Command: python production.py
-```
-
-4. 部署完成后，Render 会提供一个网址，例如：
-
-```text
-https://canteen-recommendation.onrender.com/
-```
-
-把这个网址发给老师同学即可。
-
-免费平台常见限制：
-
-- 长时间没人访问后，首次打开可能较慢。
-- 免费实例不适合大量并发。
-- PyTorch 和模型文件会增加构建时间、启动时间和内存压力。
-
-后端接口：
-
-```text
-GET  http://127.0.0.1:8004/health
-GET  http://127.0.0.1:8004/dishes
-GET  http://127.0.0.1:8004/profiles
-POST http://127.0.0.1:8004/recommend
-POST http://127.0.0.1:8004/recognize
-```
 
 ## 6. 推荐算法
 
